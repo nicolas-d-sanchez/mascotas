@@ -1,7 +1,7 @@
 <template>
   <v-container class="py-8 px-6" fluid>
     <v-row>
-      <v-col v-for="item in info.data" :key="item.id" cols="4">
+      <v-col v-for="item in alimentos" :key="item.id" cols="4">
         <v-card height="380">
           <v-img id="img" height="100" width="100" :src="item.photo"></v-img>
           <v-card-title class="text-h5">
@@ -39,12 +39,12 @@
 import axios from "axios";
 
 export default {
-  name: "HelloWorld",
+  name: "Alimentos",
   data: () => ({
     cards: ["Today", "Yesterday"],
     drawer: null,
     counter: 0,
-    info: [],
+    alimentos: [],
     links: [
       ["mdi-inbox-arrow-down", "Inbox"],
       ["mdi-send", "Send"],
@@ -78,7 +78,13 @@ export default {
   mounted() {
     axios
       .get("http://sva.talana.com:8000/api/product/?format=json")
-      .then((response) => (this.info = response));
+      .then((response) => {
+          response.data.forEach(element => {
+            if(element.category.name === "Juguetes"){                      
+              this.alimentos.push(element)
+            }       
+          });      
+      });
   },
 };
 </script>
